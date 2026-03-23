@@ -1,713 +1,446 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Aditya Bonkinpelliwar – QA Lead</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --ink: #0f0f0f;
-    --paper: #f5f2ec;
-    --accent: #c0392b;
-    --accent2: #1a3a5c;
-    --rule: #d4cfc6;
-    --muted: #6b6560;
-    --tag-bg: #e8e3da;
-    --section-num: #e0dbd2;
-  }
+:root {
+  --bg: #080c14;
+  --bg2: #0d1420;
+  --bg3: #111928;
+  --surface: #141d2e;
+  --border: #1e2d45;
+  --border2: #243352;
+  --cyan: #00d4ff;
+  --gold: #f0a500;
+  --green: #00e676;
+  --text: #e8edf5;
+  --text2: #8a9bb5;
+  --text3: #4a607a;
+  --glow: 0 0 30px rgba(0,212,255,0.15);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Lora',serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased;overflow-x:hidden;cursor:none;}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* CURSOR */
+#cur{width:10px;height:10px;background:var(--cyan);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .2s,height .2s;}
+#cur-r{width:34px;height:34px;border:1px solid rgba(0,212,255,.35);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s;}
 
-  html { scroll-behavior: smooth; }
+/* NOISE */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:.3;}
 
-  body {
-    background: var(--paper);
-    color: var(--ink);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
-  }
+/* GRID */
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.025) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
 
-  /* ── HEADER ── */
-  header {
-    position: relative;
-    padding: 5rem 4rem 4rem;
-    border-bottom: 2px solid var(--ink);
-    overflow: hidden;
-  }
-  header::before {
-    content: '';
-    position: absolute;
-    top: -80px; right: -80px;
-    width: 340px; height: 340px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(192,57,43,0.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:230px 1fr;min-height:100vh;position:relative;z-index:1;}
 
-  .header-inner {
-    max-width: 900px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 2rem;
-    align-items: end;
-  }
+/* SIDEBAR */
+aside{position:sticky;top:0;height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:2.5rem 1.8rem;overflow:hidden;}
+aside::after{content:'';position:absolute;bottom:-80px;left:-80px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,255,.07) 0%,transparent 70%);pointer-events:none;}
 
-  .name {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(2.4rem, 5vw, 3.8rem);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    color: var(--ink);
-  }
+.av{width:60px;height:60px;border-radius:50%;border:2px solid var(--cyan);box-shadow:0 0 24px rgba(0,212,255,.3);display:flex;align-items:center;justify-content:center;margin-bottom:1.4rem;background:var(--bg3);flex-shrink:0;}
+.av span{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--cyan);}
+.sn{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;color:var(--text);line-height:1.2;margin-bottom:.25rem;}
+.sr{font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--cyan);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.15rem;}
+.sl{font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--text3);margin-bottom:1.8rem;}
+.sdiv{height:1px;background:var(--border);margin-bottom:1.4rem;}
+nav{flex:1;}
+nav a{display:flex;align-items:center;gap:.65rem;font-family:'JetBrains Mono',monospace;font-size:.69rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);text-decoration:none;padding:.5rem .75rem;border-radius:4px;margin-bottom:.2rem;transition:color .2s,background .2s;position:relative;}
+nav a::before{content:'';width:0;height:2px;background:var(--cyan);position:absolute;left:0;top:50%;transform:translateY(-50%);transition:width .2s;border-radius:2px;}
+nav a:hover,nav a.active{color:var(--text);background:rgba(0,212,255,.06);}
+nav a:hover::before,nav a.active::before{width:3px;}
+.sc{margin-top:auto;padding-top:1.5rem;border-top:1px solid var(--border);}
+.sc a{display:block;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text2);text-decoration:none;margin-bottom:.45rem;transition:color .2s;word-break:break-all;}
+.sc a:hover{color:var(--cyan);}
 
-  .tagline {
-    margin-top: 0.6rem;
-    font-size: 0.88rem;
-    font-weight: 300;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
+/* MAIN */
+main{padding:0;overflow:hidden;}
 
-  .tagline span {
-    display: inline-block;
-    width: 1px;
-    height: 0.75em;
-    background: var(--rule);
-    margin: 0 0.6em;
-    vertical-align: middle;
-  }
+/* HERO */
+.hero{position:relative;padding:5rem 4rem 4rem;border-bottom:1px solid var(--border);overflow:hidden;background:linear-gradient(135deg,var(--bg) 0%,var(--bg2) 100%);}
+.hero::before{content:'';position:absolute;top:-180px;right:-180px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,255,.09) 0%,transparent 65%);pointer-events:none;}
+.hero::after{content:'';position:absolute;bottom:-80px;left:140px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(240,165,0,.06) 0%,transparent 65%);pointer-events:none;}
 
-  .contact-block {
-    text-align: right;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.78rem;
-    color: var(--muted);
-    line-height: 1.9;
-  }
+.h-label{font-family:'JetBrains Mono',monospace;font-size:.69rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:1.2rem;display:flex;align-items:center;gap:.8rem;opacity:0;animation:up .7s .1s ease forwards;}
+.h-label::before{content:'';display:inline-block;width:30px;height:1px;background:var(--cyan);}
+.h-name{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.8rem,5.5vw,5rem);line-height:.9;letter-spacing:-.03em;color:var(--text);margin-bottom:1.5rem;opacity:0;animation:up .7s .25s ease forwards;}
+.h-name em{display:block;font-style:normal;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.18);}
+.h-chips{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:2rem;opacity:0;animation:up .7s .4s ease forwards;}
+.chip{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text2);display:flex;align-items:center;gap:.45rem;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.45;transform:scale(.75);}}
+.h-sum{max-width:66ch;font-size:.97rem;line-height:1.8;color:var(--text2);border-left:2px solid var(--cyan);padding-left:1.5rem;position:relative;z-index:1;opacity:0;animation:up .7s .55s ease forwards;}
+.h-sum strong{color:var(--text);font-weight:500;}
+@keyframes up{to{opacity:1;transform:none;}}
 
-  .contact-block a {
-    color: var(--accent);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.2s;
-  }
-  .contact-block a:hover { border-color: var(--accent); }
+/* SECTION */
+.sec{padding:4rem;border-bottom:1px solid var(--border);}
+.sec-hd{display:flex;align-items:baseline;gap:1.2rem;margin-bottom:2.5rem;}
+.sec-n{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text3);letter-spacing:.1em;}
+.sec-t{font-family:'Syne',sans-serif;font-weight:700;font-size:1.45rem;color:var(--text);letter-spacing:-.02em;}
+.sec-l{flex:1;height:1px;background:var(--border);}
 
-  /* ── LAYOUT ── */
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 4rem 6rem;
-  }
+/* REVEAL */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease;}
+.rv.on{opacity:1;transform:none;}
 
-  /* ── SECTION ── */
-  section {
-    padding-top: 4rem;
-    border-top: 1px solid var(--rule);
-    margin-top: 4rem;
-    position: relative;
-    opacity: 0;
-    transform: translateY(18px);
-    animation: fadeUp 0.5s ease forwards;
-  }
-  section:nth-child(1) { animation-delay: 0.05s; }
-  section:nth-child(2) { animation-delay: 0.15s; }
-  section:nth-child(3) { animation-delay: 0.25s; }
-  section:nth-child(4) { animation-delay: 0.35s; }
-  section:nth-child(5) { animation-delay: 0.45s; }
-  section:nth-child(6) { animation-delay: 0.55s; }
+/* SKILLS */
+.sk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem;}
+.sk-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.4rem;transition:border-color .25s,box-shadow .25s,transform .25s;position:relative;overflow:hidden;}
+.sk-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent);transform:scaleX(0);transform-origin:left;transition:transform .3s;}
+.sk-card:hover{border-color:var(--border2);box-shadow:var(--glow);transform:translateY(-3px);}
+.sk-card:hover::before{transform:scaleX(1);}
+.sk-card h3{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:.85rem;}
+.tags{display:flex;flex-wrap:wrap;gap:.38rem;}
+.tag{font-family:'JetBrains Mono',monospace;font-size:.69rem;color:var(--text2);background:rgba(255,255,255,.04);border:1px solid var(--border2);padding:.2rem .6rem;border-radius:3px;transition:background .2s,color .2s,border-color .2s;}
+.tag:hover{background:rgba(0,212,255,.1);color:var(--cyan);border-color:var(--cyan);}
 
-  @keyframes fadeUp {
-    to { opacity: 1; transform: none; }
-  }
+/* EXPERIENCE */
+.exp-list{display:flex;flex-direction:column;}
+.ei{display:grid;grid-template-columns:170px 1fr;gap:0 2.5rem;padding:2.5rem 0;border-bottom:1px solid var(--border);position:relative;}
+.ei:last-child{border-bottom:none;}
+.ei::before{content:'';position:absolute;left:170px;top:0;bottom:0;width:1px;background:var(--border);}
+.el{padding-top:.1rem;}
+.ed{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text3);line-height:1.4;margin-bottom:.55rem;}
+.ec{font-family:'Syne',sans-serif;font-weight:600;font-size:.85rem;color:var(--text);margin-bottom:.25rem;line-height:1.3;}
+.erb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(240,165,0,.3);padding:.15rem .5rem;border-radius:3px;margin-top:.35rem;}
+.er{padding-left:2.5rem;}
+.ep{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text3);letter-spacing:.05em;margin-bottom:.9rem;text-transform:uppercase;}
+.ei ul{list-style:none;display:flex;flex-direction:column;gap:.48rem;margin-bottom:.9rem;}
+.ei ul li{font-size:.9rem;color:var(--text2);line-height:1.65;padding-left:1.4rem;position:relative;}
+.ei ul li::before{content:'›';position:absolute;left:0;color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:1rem;line-height:1.55;}
+.est{display:flex;flex-wrap:wrap;gap:.32rem;margin-top:.65rem;}
+.est .tag{font-size:.63rem;color:var(--text3);border-color:var(--border);padding:.14rem .5rem;}
 
-  .section-label {
-    position: absolute;
-    top: -0.6em;
-    left: 0;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    background: var(--paper);
-    padding-right: 1rem;
-  }
+/* AWARDS */
+.aw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem;}
+.aw-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.35rem;position:relative;overflow:hidden;transition:border-color .25s,box-shadow .25s,transform .25s;}
+.aw-card::after{content:'';position:absolute;bottom:0;right:0;width:80px;height:80px;background:radial-gradient(circle,rgba(240,165,0,.07),transparent 70%);pointer-events:none;}
+.aw-card:hover{border-color:rgba(240,165,0,.4);box-shadow:0 0 28px rgba(240,165,0,.1);transform:translateY(-3px);}
+.ai{font-size:1.25rem;margin-bottom:.75rem;}
+.at{font-family:'Syne',sans-serif;font-weight:600;font-size:.88rem;color:var(--text);margin-bottom:.28rem;line-height:1.3;}
+.am{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--gold);margin-bottom:.55rem;}
+.ad{font-size:.82rem;color:var(--text2);line-height:1.55;}
 
-  .section-num {
-    font-size: 4rem;
-    font-family: 'DM Serif Display', serif;
-    color: var(--section-num);
-    position: absolute;
-    top: 2.5rem;
-    right: 0;
-    line-height: 1;
-    pointer-events: none;
-    user-select: none;
-  }
+/* EDUCATION */
+.edu-c{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:2rem 2.5rem;display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap;position:relative;overflow:hidden;transition:border-color .25s,box-shadow .25s;}
+.edu-c::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--cyan),var(--gold));border-radius:3px 0 0 3px;}
+.edu-c:hover{border-color:var(--border2);box-shadow:var(--glow);}
+.edg{font-family:'Syne',sans-serif;font-weight:700;font-size:1.15rem;color:var(--text);margin-bottom:.4rem;}
+.edb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.1em;text-transform:uppercase;color:var(--green);border:1px solid rgba(0,230,118,.3);padding:.18rem .7rem;border-radius:20px;}
+.edm{text-align:right;font-family:'JetBrains Mono',monospace;font-size:.73rem;color:var(--text3);line-height:1.8;}
 
-  h2 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.75rem;
-    font-weight: 400;
-    letter-spacing: -0.01em;
-    margin-bottom: 1.5rem;
-  }
+/* FOOTER */
+footer{padding:1.8rem 4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:var(--bg2);border-top:1px solid var(--border);}
+.fn{font-family:'Syne',sans-serif;font-weight:600;font-size:.82rem;color:var(--text2);}
+footer a{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--cyan);text-decoration:none;border:1px solid rgba(0,212,255,.2);padding:.38rem .9rem;border-radius:4px;transition:background .2s,box-shadow .2s;}
+footer a:hover{background:rgba(0,212,255,.08);box-shadow:var(--glow);}
 
-  /* ── SUMMARY ── */
-  .summary p {
-    font-size: 1.02rem;
-    line-height: 1.8;
-    color: #2a2a2a;
-    max-width: 72ch;
-  }
-
-  /* ── SKILLS ── */
-  .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .skill-group h3 {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.4rem;
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-  }
-
-  .tag {
-    background: var(--tag-bg);
-    color: var(--ink);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.73rem;
-    padding: 0.22rem 0.65rem;
-    border-radius: 2px;
-    transition: background 0.2s, color 0.2s;
-  }
-  .tag:hover { background: var(--ink); color: var(--paper); }
-
-  /* ── EXPERIENCE ── */
-  .exp-list { display: flex; flex-direction: column; gap: 3rem; }
-
-  .exp-item {}
-
-  .exp-header {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 1rem;
-    align-items: baseline;
-    margin-bottom: 0.3rem;
-  }
-
-  .exp-company {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.15rem;
-    font-weight: 400;
-  }
-
-  .exp-dates {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--muted);
-    white-space: nowrap;
-  }
-
-  .exp-role {
-    font-size: 0.82rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--accent2);
-    margin-bottom: 0.2rem;
-  }
-
-  .exp-project {
-    font-size: 0.82rem;
-    color: var(--muted);
-    margin-bottom: 1rem;
-    font-style: italic;
-  }
-
-  .exp-item ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.45rem;
-  }
-
-  .exp-item ul li {
-    padding-left: 1.2rem;
-    position: relative;
-    font-size: 0.93rem;
-    line-height: 1.65;
-    color: #2f2f2f;
-  }
-
-  .exp-item ul li::before {
-    content: '—';
-    position: absolute;
-    left: 0;
-    color: var(--accent);
-    font-family: 'DM Mono', monospace;
-  }
-
-  .exp-stack {
-    margin-top: 1rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-  }
-
-  .exp-stack .tag {
-    background: transparent;
-    border: 1px solid var(--rule);
-    color: var(--muted);
-  }
-  .exp-stack .tag:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-
-  .exp-divider {
-    height: 1px;
-    background: var(--rule);
-    margin-top: 3rem;
-  }
-
-  /* ── AWARDS ── */
-  .awards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1.25rem;
-  }
-
-  .award-card {
-    border: 1px solid var(--rule);
-    padding: 1.25rem 1.4rem;
-    position: relative;
-    transition: border-color 0.2s, transform 0.2s;
-  }
-  .award-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-
-  .award-card::before {
-    content: '★';
-    position: absolute;
-    top: 1.1rem; right: 1.2rem;
-    color: var(--accent);
-    font-size: 0.75rem;
-    opacity: 0.5;
-  }
-
-  .award-title {
-    font-weight: 500;
-    font-size: 0.92rem;
-    margin-bottom: 0.2rem;
-  }
-
-  .award-meta {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--muted);
-    margin-bottom: 0.5rem;
-  }
-
-  .award-desc {
-    font-size: 0.85rem;
-    color: #4a4a4a;
-    line-height: 1.55;
-  }
-
-  /* ── EDUCATION ── */
-  .edu-block {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .edu-degree {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.2rem;
-    font-weight: 400;
-  }
-
-  .edu-meta {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.78rem;
-    color: var(--muted);
-    text-align: right;
-  }
-
-  .edu-distinction {
-    display: inline-block;
-    margin-top: 0.5rem;
-    font-size: 0.78rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent);
-    font-family: 'DM Mono', monospace;
-  }
-
-  /* ── FOOTER ── */
-  footer {
-    border-top: 2px solid var(--ink);
-    padding: 2rem 4rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
-
-  footer a {
-    color: var(--accent);
-    text-decoration: none;
-  }
-  footer a:hover { text-decoration: underline; }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 640px) {
-    header { padding: 3rem 1.5rem 2.5rem; }
-    .header-inner { grid-template-columns: 1fr; }
-    .contact-block { text-align: left; }
-    .container { padding: 0 1.5rem 4rem; }
-    footer { padding: 1.5rem; }
-    .section-num { display: none; }
-  }
+/* RESPONSIVE */
+@media(max-width:860px){
+  .layout{grid-template-columns:1fr;}
+  aside{position:relative;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:1rem;padding:1.5rem 2rem;}
+  aside::after{display:none;}
+  .av{margin-bottom:0;}
+  .sdiv,.sc{display:none;}
+  nav{display:none;}
+  .hero,.sec{padding:2.5rem 1.5rem;}
+  .ei{grid-template-columns:1fr;}
+  .ei::before{display:none;}
+  .er{padding-left:0;}
+  footer{padding:1.5rem;}
+}
 </style>
 </head>
 <body>
 
-<!-- ══ HEADER ══ -->
-<header>
-  <div class="header-inner">
-    <div>
-      <h1 class="name">Aditya<br/>Bonkinpelliwar</h1>
-      <p class="tagline">
-        Senior Consultant QA
-        <span></span>
-        8+ Years
-        <span></span>
-        Pune, India
-      </p>
-    </div>
-    <div class="contact-block">
-      <a href="tel:8007395820">8007395820</a><br/>
-      <a href="mailto:adityabonkin88@gmail.com">adityabonkin88@gmail.com</a><br/>
-      <a href="https://gitlab.com/pyspark2210312/awards" target="_blank" rel="noopener">Awards Portfolio ↗</a>
-    </div>
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside>
+  <div class="av"><span>AB</span></div>
+  <div>
+    <div class="sn">Aditya<br/>Bonkinpelliwar</div>
+    <div class="sr">QA Lead · 8+ Years</div>
+    <div class="sl">📍 Pune, India</div>
   </div>
-</header>
+  <div class="sdiv"></div>
+  <nav>
+    <a href="#summary" class="active"><span>◈</span> Profile</a>
+    <a href="#skills"><span>◈</span> Skills</a>
+    <a href="#experience"><span>◈</span> Experience</a>
+    <a href="#education"><span>◈</span> Education</a>
+    <a href="#awards"><span>◈</span> Awards</a>
+  </nav>
+  <div class="sc">
+    <a href="tel:8007395820">📞 8007395820</a>
+    <a href="mailto:adityabonkin88@gmail.com">✉ adityabonkin88@gmail.com</a>
+    <a href="https://gitlab.com/pyspark2210312/awards" target="_blank" rel="noopener">🏆 Awards Portfolio ↗</a>
+  </div>
+</aside>
 
-<div class="container">
+<!-- MAIN -->
+<main>
 
-  <!-- ══ SUMMARY ══ -->
-  <section class="summary">
-    <span class="section-label">01 — Profile</span>
-    <span class="section-num">01</span>
-    <h2>Professional Summary</h2>
-    <p>
-      Results-driven <strong>QA Lead</strong> with 8+ years of experience and a proven track record in QA leadership.
-      Expertise includes 7+ years in <strong>GUI test automation</strong> (Desktop &amp; Web), 1 year in <strong>API testing</strong>,
-      and 1 year in <strong>Storage functional testing</strong>. Successfully leveraged AI copilots
-      (GitHub Copilot and Augment AI) to accelerate delivery and currently practising
-      <strong>MCP and AI Agents for test automation</strong>. Immediate joiner seeking a QA Lead,
-      Test Lead, or Senior Consultant role in Pune.
+  <!-- HERO -->
+  <div class="hero" id="summary">
+    <div class="h-label">Senior Consultant · QA Lead · Immediate Joiner</div>
+    <h1 class="h-name">Aditya<em>Bonkinpelliwar</em></h1>
+    <div class="h-chips">
+      <div class="chip"><span class="dot"></span> 8+ Years Experience</div>
+      <div class="chip"><span class="dot"></span> GUI · API · Storage Testing</div>
+      <div class="chip"><span class="dot"></span> MCP &amp; AI Agents Practitioner</div>
+    </div>
+    <p class="h-sum">
+      Results-driven <strong>QA Lead</strong> with a proven track record in QA leadership.
+      Expertise in <strong>7+ years GUI test automation</strong> (Desktop &amp; Web),
+      1 year API testing, and 1 year Storage functional testing. Successfully leveraged
+      <strong>AI copilots</strong> (GitHub Copilot &amp; Augment AI) to accelerate delivery
+      and currently practising <strong>MCP and AI Agents for test automation</strong>.
+      Immediate joiner seeking QA Lead / Test Lead / Senior Consultant role in Pune.
     </p>
-  </section>
+  </div>
 
-  <!-- ══ SKILLS ══ -->
-  <section>
-    <span class="section-label">02 — Skills</span>
-    <span class="section-num">02</span>
-    <h2>Core Competencies</h2>
-    <div class="skills-grid">
-      <div class="skill-group">
-        <h3>Automation</h3>
-        <div class="tags">
-          <span class="tag">Selenium</span>
-          <span class="tag">PyTest</span>
-          <span class="tag">Squish (Java &amp; QT)</span>
-          <span class="tag">Protractor</span>
-          <span class="tag">GUI Automation</span>
-          <span class="tag">API Automation</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <h3>Languages</h3>
-        <div class="tags">
-          <span class="tag">Python (advanced)</span>
-          <span class="tag">Shell Script</span>
-          <span class="tag">Batch Script</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <h3>CI/CD &amp; VCS</h3>
-        <div class="tags">
-          <span class="tag">Jenkins</span>
-          <span class="tag">GitLab CI/CD</span>
-          <span class="tag">Git</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <h3>Storage Testing</h3>
-        <div class="tags">
-          <span class="tag">FlashBlade</span>
-          <span class="tag">NFS</span>
-          <span class="tag">VDBench</span>
-          <span class="tag">DT</span>
-          <span class="tag">FSSTRESS</span>
-          <span class="tag">RFT</span>
-          <span class="tag">Snapshot Sanity</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <h3>Test Management</h3>
-        <div class="tags">
-          <span class="tag">TestRail</span>
-          <span class="tag">Jira</span>
-          <span class="tag">Framework Development</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <h3>Platforms</h3>
-        <div class="tags">
-          <span class="tag">Linux (Ubuntu)</span>
-          <span class="tag">Windows</span>
-          <span class="tag">WSL</span>
-          <span class="tag">AWS (S3, EC2, IAM)</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <h3>Tools / Dev</h3>
-        <div class="tags">
-          <span class="tag">VSCode</span>
-          <span class="tag">Poetry</span>
-          <span class="tag">Pre-commit hooks</span>
-          <span class="tag">Flake8</span>
-          <span class="tag">Black</span>
-          <span class="tag">Isort</span>
-          <span class="tag">Mypy</span>
-          <span class="tag">Cruft</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <h3>AI Tools</h3>
-        <div class="tags">
-          <span class="tag">ChatGPT</span>
-          <span class="tag">GitHub Copilot</span>
-          <span class="tag">Augment AI</span>
-          <span class="tag">MCP</span>
-          <span class="tag">AI Agents</span>
-        </div>
-      </div>
+  <!-- SKILLS -->
+  <section class="sec rv" id="skills">
+    <div class="sec-hd">
+      <span class="sec-n">02</span>
+      <h2 class="sec-t">Core Competencies</h2>
+      <div class="sec-l"></div>
+    </div>
+    <div class="sk-grid">
+      <div class="sk-card rv"><h3>Automation</h3><div class="tags"><span class="tag">Selenium</span><span class="tag">PyTest</span><span class="tag">Squish Java</span><span class="tag">Squish QT</span><span class="tag">Protractor</span><span class="tag">GUI Automation</span><span class="tag">API Automation</span></div></div>
+      <div class="sk-card rv"><h3>Languages</h3><div class="tags"><span class="tag">Python (advanced)</span><span class="tag">Shell Script</span><span class="tag">Batch Script</span></div></div>
+      <div class="sk-card rv"><h3>CI/CD &amp; VCS</h3><div class="tags"><span class="tag">Jenkins</span><span class="tag">GitLab CI/CD</span><span class="tag">Git</span></div></div>
+      <div class="sk-card rv"><h3>Storage Testing</h3><div class="tags"><span class="tag">FlashBlade</span><span class="tag">NFS</span><span class="tag">VDBench</span><span class="tag">DT</span><span class="tag">FSSTRESS</span><span class="tag">RFT</span><span class="tag">Snapshot Sanity</span></div></div>
+      <div class="sk-card rv"><h3>Test Management</h3><div class="tags"><span class="tag">TestRail</span><span class="tag">Jira</span><span class="tag">Framework Dev</span></div></div>
+      <div class="sk-card rv"><h3>Platforms</h3><div class="tags"><span class="tag">Linux (Ubuntu)</span><span class="tag">Windows</span><span class="tag">WSL</span><span class="tag">AWS S3</span><span class="tag">AWS EC2</span><span class="tag">AWS IAM</span></div></div>
+      <div class="sk-card rv"><h3>Tools / Dev</h3><div class="tags"><span class="tag">VSCode</span><span class="tag">Poetry</span><span class="tag">Pre-commit</span><span class="tag">Flake8</span><span class="tag">Black</span><span class="tag">Isort</span><span class="tag">Mypy</span><span class="tag">Cruft</span></div></div>
+      <div class="sk-card rv"><h3>AI Tools</h3><div class="tags"><span class="tag">ChatGPT</span><span class="tag">GitHub Copilot</span><span class="tag">Augment AI</span><span class="tag">MCP</span><span class="tag">AI Agents</span></div></div>
     </div>
   </section>
 
-  <!-- ══ EXPERIENCE ══ -->
-  <section>
-    <span class="section-label">03 — Experience</span>
-    <span class="section-num">03</span>
-    <h2>Professional Experience</h2>
+  <!-- EXPERIENCE -->
+  <section class="sec rv" id="experience">
+    <div class="sec-hd">
+      <span class="sec-n">03</span>
+      <h2 class="sec-t">Professional Experience</h2>
+      <div class="sec-l"></div>
+    </div>
     <div class="exp-list">
 
-      <div class="exp-item">
-        <div class="exp-header">
-          <span class="exp-company">Infobeans Technologies Limited</span>
-          <span class="exp-dates">Mar 2025 – Dec 2025</span>
+      <div class="ei rv">
+        <div class="el">
+          <div class="ed">Mar 2025<br/>— Dec 2025</div>
+          <div class="ec">Infobeans Technologies</div>
+          <div class="erb">Sr. Consultant QA</div>
         </div>
-        <div class="exp-role">Senior Consultant – QA · Pune</div>
-        <div class="exp-project">Project: Pure Storage FlashBlade</div>
-        <ul>
-          <li>Automated FlashBlade cluster configuration including File Systems, Data VIPs, Object Store, Snapshots, PhoneHome, and Catalysts Diagnostics using Python.</li>
-          <li>Manually executed Long-Running Tests (LRT) with workloads (VDBench, DT, FSSTRESS, RFT) over extended durations (2 days to months) across multiple initiators; automated concurrent workflow execution during LRT to ensure zero product impact.</li>
-          <li>Triaged CI/CD pipeline failures in Jenkins, classified bugs, resolved flaky tests, and managed JIRA defect tracking with signatures and defectors.</li>
-          <li>Built Snapshot Sanity Test Automation suite to validate data integrity and system reliability end-to-end.</li>
-          <li>Developed NFS Auditing Automation covering functional and performance test cases using Python and PyTest; validated auditing under workload, HA, and NDU conditions.</li>
-          <li>Received 2× 'Pat on the Back' recognition (Jun &amp; Oct 2025) for outstanding performance.</li>
-        </ul>
-        <div class="exp-stack">
-          <span class="tag">Python</span><span class="tag">PyTest</span><span class="tag">Jenkins</span><span class="tag">JIRA</span><span class="tag">NFS</span><span class="tag">FlashBlade</span>
-        </div>
-      </div>
-
-      <div class="exp-item">
-        <div class="exp-header">
-          <span class="exp-company">BOSCH Global Software Technologies</span>
-          <span class="exp-dates">Aug 2023 – Jan 2025</span>
-        </div>
-        <div class="exp-role">Tech Lead – QA · Pune</div>
-        <div class="exp-project">Project: One Parking (1P) – SharePoint Automation</div>
-        <ul>
-          <li>Led GUI test automation for BOSCH 1P on-premises SharePoint using Selenium and Python; wrote scripts and maintained the full test suite.</li>
-          <li>Involved in development of Python-based DTI command tooling and automation of Release Notes generation, reducing manual effort significantly.</li>
-          <li>Enforced code quality via Python linters (isort, flake8, black, mypy), pre-commit hooks, poetry, and cruft in the team's daily workflow.</li>
-          <li>Conducted peer code reviews, presented QA metrics to senior management, and facilitated sprint planning across agile cycles.</li>
-          <li>Received Bravo Award (Dec 2024) for outstanding teamwork and contributions within the 1P team.</li>
-        </ul>
-        <div class="exp-stack">
-          <span class="tag">Python</span><span class="tag">Selenium</span><span class="tag">PyTest</span><span class="tag">PyTest-Allure</span><span class="tag">Poetry</span><span class="tag">Jenkins</span><span class="tag">Git</span>
+        <div class="er">
+          <div class="ep">// Pure Storage FlashBlade</div>
+          <ul>
+            <li>Automated FlashBlade cluster configuration — File Systems, Data VIPs, Object Store, Snapshots, PhoneHome, and Catalysts Diagnostics using Python.</li>
+            <li>Manually executed Long-Running Tests (LRT) with workloads (VDBench, DT, FSSTRESS, RFT) over extended durations across multiple initiators; automated concurrent workflow execution during LRT to ensure zero product impact.</li>
+            <li>Triaged CI/CD pipeline failures in Jenkins, classified bugs, resolved flaky tests, managed JIRA defect tracking.</li>
+            <li>Built Snapshot Sanity Test Automation suite to validate data integrity and system reliability end-to-end.</li>
+            <li>Developed NFS Auditing Automation covering functional and performance test cases using Python and PyTest; validated under workload, HA, and NDU conditions.</li>
+            <li>🏅 Received 2× 'Pat on the Back' recognition (Jun &amp; Oct 2025) for outstanding performance.</li>
+          </ul>
+          <div class="est"><span class="tag">Python</span><span class="tag">PyTest</span><span class="tag">Jenkins</span><span class="tag">JIRA</span><span class="tag">NFS</span><span class="tag">FlashBlade</span></div>
         </div>
       </div>
 
-      <div class="exp-item">
-        <div class="exp-header">
-          <span class="exp-company">GlobalLogic India Pvt. Ltd.</span>
-          <span class="exp-dates">Sep 2022 – Jun 2023</span>
+      <div class="ei rv">
+        <div class="el">
+          <div class="ed">Aug 2023<br/>— Jan 2025</div>
+          <div class="ec">BOSCH Global Software Technologies</div>
+          <div class="erb">Tech Lead QA</div>
         </div>
-        <div class="exp-role">Consultant – QA Lead · Pune</div>
-        <div class="exp-project">Project: Alteryx Data Connectors (Denim)</div>
-        <ul>
-          <li>Led a team of 4 QA engineers; onboarded team to Alteryx Test Framework and GitLab CI/CD pipelines during project transition from Persistent Systems.</li>
-          <li>Managed GitLab CI/CD QE pipelines and owned GUI test automation for 10+ Alteryx data connectors including SharePoint, Box, Dropbox, Tableau, GA4, Google Drive, ADLS, and PowerBI.</li>
-          <li>Received Spot Award (Oct 2022) for effectively leading the QA team during a critical project transition.</li>
-        </ul>
-        <div class="exp-stack">
-          <span class="tag">Python</span><span class="tag">Selenium</span><span class="tag">PyTest</span><span class="tag">Pandas</span><span class="tag">GitLab CI/CD</span><span class="tag">Alteryx Designer</span><span class="tag">TestRail</span><span class="tag">Jira</span>
-        </div>
-      </div>
-
-      <div class="exp-item">
-        <div class="exp-header">
-          <span class="exp-company">Esteco Software India Pvt. Ltd.</span>
-          <span class="exp-dates">Jul 2017 – Sep 2022</span>
-        </div>
-        <div class="exp-role">Principal Engineer – QA · Pune</div>
-        <div class="exp-project">Products: modeFRONTIER (Desktop) · VOLTA (Web)</div>
-        <ul>
-          <li>Enhanced desktop GUI test automation framework and compatibility testing framework for modeFRONTIER.</li>
-          <li>Completed POC for API testing framework; contributed to Grid Testing framework development.</li>
-          <li>Automated GUI tests for both desktop (modeFRONTIER) and web (VOLTA) using Squish for Java and Protractor.</li>
-          <li>Managed Jenkins QA pipelines for daily and weekly regression runs; maintained test infrastructure on Ubuntu and Windows.</li>
-          <li>Onsite at Trieste, Italy (2019, 1 month) for GUI test automation challenges resolution.</li>
-        </ul>
-        <div class="exp-stack">
-          <span class="tag">Python</span><span class="tag">Squish for Java</span><span class="tag">Protractor</span><span class="tag">Jenkins</span><span class="tag">Git</span><span class="tag">Jira</span>
+        <div class="er">
+          <div class="ep">// One Parking (1P) – SharePoint Automation</div>
+          <ul>
+            <li>Led GUI test automation for BOSCH 1P on-premises SharePoint using Selenium and Python; wrote scripts and maintained the full test suite.</li>
+            <li>Involved in development of Python-based DTI command tooling and automation of Release Notes generation, reducing manual effort significantly.</li>
+            <li>Enforced code quality via Python linters (isort, flake8, black, mypy), pre-commit hooks, poetry, and cruft in the team's daily workflow.</li>
+            <li>Conducted peer code reviews, presented QA metrics to senior management, facilitated sprint planning.</li>
+            <li>🏅 Received Bravo Award (Dec 2024) for outstanding teamwork and contributions within the 1P team.</li>
+          </ul>
+          <div class="est"><span class="tag">Python</span><span class="tag">Selenium</span><span class="tag">PyTest</span><span class="tag">PyTest-Allure</span><span class="tag">Poetry</span><span class="tag">Jenkins</span><span class="tag">Git</span></div>
         </div>
       </div>
 
-      <div class="exp-item">
-        <div class="exp-header">
-          <span class="exp-company">HCL Technologies Ltd.</span>
-          <span class="exp-dates">Aug 2016 – Jun 2017</span>
+      <div class="ei rv">
+        <div class="el">
+          <div class="ed">Sep 2022<br/>— Jun 2023</div>
+          <div class="ec">GlobalLogic India</div>
+          <div class="erb">Consultant – QA Lead</div>
         </div>
-        <div class="exp-role">Lead Engineer – QA · Pune</div>
-        <div class="exp-project">Projects: ISG Automazing &amp; ISG Reprogramming</div>
-        <ul>
-          <li>Developed test automation scripts and enhanced test framework using Python and Squish for QT.</li>
-          <li>Contributed to reprogramming scripts and overall QA framework improvements.</li>
-        </ul>
-        <div class="exp-stack">
-          <span class="tag">Python</span><span class="tag">Squish for QT</span><span class="tag">Jenkins</span><span class="tag">Git</span><span class="tag">Code Collaborator</span>
+        <div class="er">
+          <div class="ep">// Alteryx Data Connectors (Denim)</div>
+          <ul>
+            <li>Led a team of 4 QA engineers; onboarded team to Alteryx Test Framework and GitLab CI/CD during project transition from Persistent Systems.</li>
+            <li>Managed GitLab CI/CD QE pipelines and owned GUI test automation for 10+ connectors including SharePoint, Box, Dropbox, Tableau, GA4, Google Drive, ADLS, and PowerBI.</li>
+            <li>🏅 Received Spot Award (Oct 2022) for effectively leading the QA team during a critical project transition.</li>
+          </ul>
+          <div class="est"><span class="tag">Python</span><span class="tag">Selenium</span><span class="tag">PyTest</span><span class="tag">Pandas</span><span class="tag">GitLab CI/CD</span><span class="tag">Alteryx Designer</span><span class="tag">TestRail</span></div>
         </div>
       </div>
 
-      <div class="exp-item">
-        <div class="exp-header">
-          <span class="exp-company">Pragmatic Techsoft Pvt. Ltd.</span>
-          <span class="exp-dates">Feb 2015 – Aug 2016</span>
+      <div class="ei rv">
+        <div class="el">
+          <div class="ed">Jul 2017<br/>— Sep 2022</div>
+          <div class="ec">Esteco Software India</div>
+          <div class="erb">Principal Engineer QA</div>
         </div>
-        <div class="exp-role">Senior OpenERP Developer · Pune</div>
-        <ul>
-          <li>Python development for OpenERP (Odoo) module development and customization.</li>
-        </ul>
+        <div class="er">
+          <div class="ep">// modeFRONTIER (Desktop) · VOLTA (Web)</div>
+          <ul>
+            <li>Enhanced desktop GUI test automation framework and compatibility testing framework for modeFRONTIER.</li>
+            <li>Completed POC for API testing framework; contributed to Grid Testing framework development.</li>
+            <li>Automated GUI tests for both desktop and web using Squish for Java and Protractor.</li>
+            <li>Managed Jenkins QA pipelines for daily and weekly regression runs on Ubuntu and Windows.</li>
+            <li>🌍 Onsite at Trieste, Italy (2019, 1 month) for GUI test automation challenges resolution.</li>
+          </ul>
+          <div class="est"><span class="tag">Python</span><span class="tag">Squish for Java</span><span class="tag">Protractor</span><span class="tag">Jenkins</span><span class="tag">Git</span><span class="tag">Jira</span></div>
+        </div>
       </div>
 
-      <div class="exp-item">
-        <div class="exp-header">
-          <span class="exp-company">Bista Solutions Pvt. Ltd.</span>
-          <span class="exp-dates">Sep 2012 – Dec 2014</span>
+      <div class="ei rv">
+        <div class="el">
+          <div class="ed">Aug 2016<br/>— Jun 2017</div>
+          <div class="ec">HCL Technologies</div>
+          <div class="erb">Lead Engineer QA</div>
         </div>
-        <div class="exp-role">ERP Developer · Mumbai</div>
-        <ul>
-          <li>Python development for OpenERP (Odoo) module development and customization.</li>
-          <li>Onsite team lead at Johannesburg, South Africa for HWSETA project (2015, 3.5 months).</li>
-        </ul>
+        <div class="er">
+          <div class="ep">// ISG Automazing &amp; ISG Reprogramming</div>
+          <ul>
+            <li>Developed test automation scripts and enhanced test framework using Python and Squish for QT.</li>
+            <li>Contributed to reprogramming scripts and overall QA framework improvements.</li>
+          </ul>
+          <div class="est"><span class="tag">Python</span><span class="tag">Squish for QT</span><span class="tag">Jenkins</span><span class="tag">Git</span><span class="tag">Code Collaborator</span></div>
+        </div>
+      </div>
+
+      <div class="ei rv">
+        <div class="el">
+          <div class="ed">Feb 2015<br/>— Aug 2016</div>
+          <div class="ec">Pragmatic Techsoft</div>
+          <div class="erb">Sr. OpenERP Developer</div>
+        </div>
+        <div class="er">
+          <div class="ep">// OpenERP / Odoo Development</div>
+          <ul><li>Python development for OpenERP (Odoo) module development and customization.</li></ul>
+        </div>
+      </div>
+
+      <div class="ei rv">
+        <div class="el">
+          <div class="ed">Sep 2012<br/>— Dec 2014</div>
+          <div class="ec">Bista Solutions</div>
+          <div class="erb">ERP Developer</div>
+        </div>
+        <div class="er">
+          <div class="ep">// OpenERP / Odoo Development</div>
+          <ul>
+            <li>Python development for OpenERP (Odoo) module development and customization.</li>
+            <li>🌍 Onsite team lead at Johannesburg, South Africa for HWSETA project (2015, 3.5 months).</li>
+          </ul>
+        </div>
       </div>
 
     </div>
   </section>
 
-  <!-- ══ EDUCATION ══ -->
-  <section>
-    <span class="section-label">04 — Education</span>
-    <span class="section-num">04</span>
-    <h2>Education</h2>
-    <div class="edu-block">
+  <!-- EDUCATION -->
+  <section class="sec rv" id="education">
+    <div class="sec-hd">
+      <span class="sec-n">04</span>
+      <h2 class="sec-t">Education</h2>
+      <div class="sec-l"></div>
+    </div>
+    <div class="edu-c rv">
       <div>
-        <div class="edu-degree">Master of Computer Applications (MCA)</div>
-        <span class="edu-distinction">First Class with Distinction</span>
+        <div class="edg">Master of Computer Applications (MCA)</div>
+        <span class="edb">First Class with Distinction</span>
       </div>
-      <div class="edu-meta">
-        University of Pune<br/>2012
-      </div>
+      <div class="edm">University of Pune<br/>2012</div>
     </div>
   </section>
 
-  <!-- ══ AWARDS ══ -->
-  <section>
-    <span class="section-label">05 — Recognition</span>
-    <span class="section-num">05</span>
-    <h2>Awards &amp; Recognition</h2>
-    <div class="awards-grid">
-      <div class="award-card">
-        <div class="award-title">Pat on the Back ×2 — Infobeans</div>
-        <div class="award-meta">Jun &amp; Oct 2025</div>
-        <div class="award-desc">Best performance recognition during Pure Storage FlashBlade engagement.</div>
-      </div>
-      <div class="award-card">
-        <div class="award-title">Bravo Award — BOSCH</div>
-        <div class="award-meta">Dec 2024</div>
-        <div class="award-desc">Outstanding teamwork and contributions within the One Parking (1P) team.</div>
-      </div>
-      <div class="award-card">
-        <div class="award-title">Spot Award — GlobalLogic</div>
-        <div class="award-meta">Oct 2022</div>
-        <div class="award-desc">Effectively led QA team during critical Alteryx Data Connectors project transition.</div>
-      </div>
-      <div class="award-card">
-        <div class="award-title">Onsite Lead — South Africa</div>
-        <div class="award-meta">2015 · 3.5 months</div>
-        <div class="award-desc">Team lead for HWSETA client engagement in Johannesburg.</div>
-      </div>
-      <div class="award-card">
-        <div class="award-title">Onsite Expert — Italy</div>
-        <div class="award-meta">2019 · 1 month</div>
-        <div class="award-desc">Deployed to Trieste for GUI test automation challenges resolution at Esteco.</div>
-      </div>
+  <!-- AWARDS -->
+  <section class="sec rv" id="awards">
+    <div class="sec-hd">
+      <span class="sec-n">05</span>
+      <h2 class="sec-t">Awards &amp; Recognition</h2>
+      <div class="sec-l"></div>
     </div>
-    <p style="margin-top:1.5rem; font-family:'DM Mono',monospace; font-size:0.78rem; color:var(--muted);">
-      Full portfolio: <a href="https://gitlab.com/pyspark2210312/awards" target="_blank" rel="noopener" style="color:var(--accent);">gitlab.com/pyspark2210312/awards ↗</a>
+    <div class="aw-grid">
+      <div class="aw-card rv"><div class="ai">🏅</div><div class="at">Pat on the Back ×2</div><div class="am">Infobeans · Jun &amp; Oct 2025</div><div class="ad">Best performance recognition during Pure Storage FlashBlade engagement.</div></div>
+      <div class="aw-card rv"><div class="ai">🏆</div><div class="at">Bravo Award</div><div class="am">BOSCH · Dec 2024</div><div class="ad">Outstanding teamwork and contributions within the One Parking (1P) team.</div></div>
+      <div class="aw-card rv"><div class="ai">⚡</div><div class="at">Spot Award</div><div class="am">GlobalLogic · Oct 2022</div><div class="ad">Effectively led QA team during critical Alteryx Data Connectors project transition.</div></div>
+      <div class="aw-card rv"><div class="ai">🌍</div><div class="at">Onsite Lead — South Africa</div><div class="am">Johannesburg · 2015 · 3.5 months</div><div class="ad">Team lead for HWSETA client engagement at Bista Solutions.</div></div>
+      <div class="aw-card rv"><div class="ai">✈️</div><div class="at">Onsite Expert — Italy</div><div class="am">Trieste · 2019 · 1 month</div><div class="ad">Deployed to Esteco HQ for GUI test automation challenges resolution.</div></div>
+    </div>
+    <p style="margin-top:1.5rem;font-family:'JetBrains Mono',monospace;font-size:.71rem;color:var(--text3);">
+      Full portfolio →
+      <a href="https://gitlab.com/pyspark2210312/awards" target="_blank" rel="noopener"
+        style="color:var(--cyan);text-decoration:none;border-bottom:1px solid rgba(0,212,255,.3);">
+        gitlab.com/pyspark2210312/awards ↗
+      </a>
     </p>
   </section>
 
+  <footer>
+    <span class="fn">Aditya Bonkinpelliwar · QA Lead · Pune</span>
+    <a href="https://gitlab.com/pyspark2210312/awards" target="_blank" rel="noopener">🏆 Awards Portfolio ↗</a>
+  </footer>
+
+</main>
 </div>
 
-<!-- ══ FOOTER ══ -->
-<footer>
-  <span>Aditya Bonkinpelliwar · QA Lead</span>
-  <a href="https://gitlab.com/pyspark2210312/awards" target="_blank" rel="noopener">🏆 Awards Portfolio ↗</a>
-</footer>
+<script>
+// Custom cursor
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function loop(){
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+  rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,button,.sk-card,.aw-card,.edu-c').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='18px';cur.style.height='18px';ring.style.width='50px';ring.style.height='50px';});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.width='34px';ring.style.height='34px';});
+});
 
+// Scroll reveal
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('on'),i*55);});
+},{threshold:.07});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+// Active nav
+const secs=document.querySelectorAll('[id]');
+const links=document.querySelectorAll('nav a');
+const nobs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const a=document.querySelector(`nav a[href="#${e.target.id}"]`);
+      if(a)a.classList.add('active');
+    }
+  });
+},{threshold:.4});
+secs.forEach(s=>nobs.observe(s));
+</script>
 </body>
 </html>
